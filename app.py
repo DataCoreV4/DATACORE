@@ -125,7 +125,7 @@ if "logged" not in st.session_state:
 def auth():
     col1, col2, col3 = st.columns([1,2,1])
     with col2:
-st.image(LOGO_PATH, width=180)
+st.image("./logo_datacore.png", width=180)
         st.markdown("<div class='login-title'>DATA CORE</div>", unsafe_allow_html=True)
         st.markdown("<div class='login-sub'>Plataforma inteligente de datos agroexportadores</div>", unsafe_allow_html=True)
 
@@ -167,7 +167,7 @@ def header():
     col1, col2, col3, col4 = st.columns([1,3,5,2])
 
     with col1:
-       st.image(LOGO_PATH, width=180)
+       st.image("./logo_datacore.png", width=180)
 
     with col2:
         st.markdown("### Data Core")
