@@ -14,6 +14,25 @@ st.set_page_config(
     page_icon="📊",
     layout="wide"
 )
+st.markdown("""
+<style>
+/* Fondo general con logo */
+.stApp {
+    background-image: url("logo_datacore.png");
+    background-size: 35%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+/* Capa blanca suave para legibilidad */
+.main > div {
+    background-color: rgba(255,255,255,0.88);
+    padding: 1.5rem;
+    border-radius: 10px;
+}
+</style>
+""", unsafe_allow_html=True)
 
 ADMIN_USER = "DCADMIN"
 ADMIN_PASS = "admindatacore123!"
