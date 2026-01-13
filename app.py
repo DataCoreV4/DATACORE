@@ -178,12 +178,23 @@ def auth():
 # HEADER INTERNO (SOLO VISUAL)
 # =====================================================
 def render_header():
-    st.markdown("<div class='dc-header'>", unsafe_allow_html=True)
-    st.markdown("<div class='dc-left'>", unsafe_allow_html=True)
-    if os.path.exists(LOGO_PATH):
-        st.image(LOGO_PATH, width=40)
-    st.markdown("<div class='dc-title'>DATA CORE</div>", unsafe_allow_html=True)
-    st.markdown("</div>", unsafe_allow_html=True)
+    col1, col2, col3, col4 = st.columns([1,3,4,2])
+
+    with col1:
+        st.image("logo_datacore.png", width=55)
+
+    with col2:
+        st.markdown("### Data Core")
+
+    with col3:
+        st.markdown(f"👤 **{st.session_state.user}**")
+
+    with col4:
+        if st.button("Cerrar sesión"):
+            st.session_state.logged = False
+            st.rerun()
+
+    st.markdown("---")
 
     col_user, col_btn = st.columns([6,1])
     with col_user:
