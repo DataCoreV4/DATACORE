@@ -16,7 +16,8 @@ ADMIN_PASS = "admindatacore123!"
 USERS_FILE = "users.csv"
 PERMISSIONS_FILE = "permissions.csv"
 CONTACT_EMAIL = "datacore.agrotech@gmail.com"
-LOGO_PATH = "logo_datacore.png"
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+LOGO_PATH = os.path.join(BASE_DIR, "logo_datacore.png")
 
 # =====================================================
 # ESTILOS (SOLO VISUAL – NO LÓGICA)
