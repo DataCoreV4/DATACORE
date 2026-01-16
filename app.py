@@ -5,54 +5,17 @@ from io import BytesIO
 import os
 import unicodedata
 from datetime import date
-import base64
 
 # =====================================================
 # CONFIG
 # =====================================================
-st.set_page_config(
-    page_title="Data Core",
-    page_icon="📊",
-    layout="wide"
-)
+st.set_page_config("Data Core", layout="wide")
 
 ADMIN_USER = "DCADMIN"
 ADMIN_PASS = "admindatacore123!"
 USERS_FILE = "users.csv"
 PERMISSIONS_FILE = "permissions.csv"
 CONTACT_EMAIL = "datacore.agrotech@gmail.com"
-LOGO_PATH = "logo_datacore.png"
-
-# =====================================================
-# LOGO COMO FONDO (BASE64 – GARANTIZADO)
-# =====================================================
-def get_base64_logo(path):
-    if not os.path.exists(path):
-        return ""
-    with open(path, "rb") as f:
-        return base64.b64encode(f.read()).decode()
-
-logo_base64 = get_base64_logo(LOGO_PATH)
-
-if logo_base64:
-    st.markdown(f"""
-    <style>
-    .stApp {{
-        background-image: url("data:image/png;base64,{logo_base64}");
-        background-repeat: no-repeat;
-        background-position: center;
-        background-size: 35%;
-        background-attachment: fixed;
-    }}
-
-    /* Capa blanca para legibilidad */
-    .main > div {{
-        background-color: rgba(255,255,255,0.90);
-        padding: 1.5rem;
-        border-radius: 12px;
-    }}
-    </style>
-    """, unsafe_allow_html=True)
 
 # =====================================================
 # DRIVE MAP (NO SE TOCA)
@@ -203,7 +166,7 @@ if "logged" not in st.session_state:
     st.session_state.update({"logged":False,"role":"","user":""})
 
 # =====================================================
-# AUTH + REGISTRO (SIN CAMBIOS)
+# AUTH + REGISTRO
 # =====================================================
 def auth():
     st.title("🔐 Data Core – Acceso")
@@ -237,7 +200,7 @@ def auth():
                     st.success("Registro exitoso")
 
 # =====================================================
-# DASHBOARD (SIN CAMBIOS FUNCIONALES)
+# DASHBOARD
 # =====================================================
 def dashboard():
     st.markdown(f"👋 **Bienvenido, {st.session_state.user}**")
@@ -274,6 +237,35 @@ def dashboard():
                 )
         except:
             st.info("📌 Información en proceso de mejora")
+
+    if st.session_state.role=="admin":
+        st.subheader("🛠 Gestión de usuarios")
+        users=pd.read_csv(USERS_FILE)
+        perms=pd.read_csv(PERMISSIONS_FILE)
+
+        for i,r in users.iterrows():
+            if r.usuario==ADMIN_USER: continue
+
+            users.loc[i,"rol"]=st.selectbox(
+                r.usuario,["freemium","premium"],
+                index=0 if r.rol=="freemium" else 1,
+                key=f"rol_{i}"
+            )
+
+            if users.loc[i,"rol"]=="premium":
+                with st.expander(f"Permisos – {r.usuario}"):
+                    producto_p=st.selectbox("Producto",["uva","mango","arandano","limon","palta"],key=f"p{i}")
+                    anio_p=st.selectbox("Año",sorted(DRIVE_MAP["envios"].keys()),key=f"a{i}")
+                    mes_p=st.selectbox("Mes",MESES,key=f"m{i}")
+                    fi=st.date_input("Fecha inicio",key=f"fi{i}")
+                    ff=st.date_input("Fecha fin",key=f"ff{i}")
+
+                    if st.button("Guardar permiso",key=f"s{i}"):
+                        perms.loc[len(perms)]=[r.usuario,producto_p,anio_p,mes_p,fi,ff]
+                        perms.to_csv(PERMISSIONS_FILE,index=False)
+                        st.success("Permiso guardado")
+
+        users.to_csv(USERS_FILE,index=False)
 
 # =====================================================
 # MAIN
